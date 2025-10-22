@@ -1,0 +1,103 @@
+<Window x:Class="BatchRotateWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Batch Rotate Images" Height="600" Width="960" MinWidth="840" MinHeight="520">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,8">
+            <TextBlock Text="Input Folder:" VerticalAlignment="Center" Margin="0,0,8,0" />
+            <TextBox x:Name="InputFolderTextBox" Width="400" IsReadOnly="True" />
+            <Button Content="Browse..." Margin="8,0" Click="BrowseInput_Click" />
+            <Button Content="Load Images" Click="LoadImages_Click" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,8">
+            <TextBlock Text="Output Folder:" VerticalAlignment="Center" Margin="0,0,8,0" />
+            <TextBox x:Name="OutputFolderTextBox" Width="400" IsReadOnly="True" />
+            <Button Content="Browse..." Margin="8,0" Click="BrowseOutput_Click" />
+            <CheckBox x:Name="OverwriteCheckBox" Content="Overwrite existing files" Margin="16,0,0,0" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,0,0,12" VerticalAlignment="Center">
+            <TextBlock Text="Rotation Angle:" VerticalAlignment="Center" Margin="0,0,8,0" />
+            <ComboBox x:Name="AngleComboBox" Width="120" IsEditable="True" Text="90">
+                <ComboBoxItem Content="90" />
+                <ComboBoxItem Content="180" />
+                <ComboBoxItem Content="270" />
+            </ComboBox>
+            <TextBlock Text="°" FontSize="16" VerticalAlignment="Center" Margin="4,0,0,0" />
+            <TextBlock Text="Suffix:" VerticalAlignment="Center" Margin="24,0,8,0" />
+            <TextBox x:Name="SuffixTextBox" Width="120" Text="_r{angle}" />
+        </StackPanel>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,8,0">
+                <ScrollViewer>
+                    <ListBox x:Name="ImagesListBox" SelectionChanged="ImagesListBox_OnSelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel Margin="0,6">
+                                    <Image Source="{Binding Thumbnail}" Width="64" Height="64" Stretch="Uniform" Margin="0,0,10,0" />
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding FileName}" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding Dimensions}" FontSize="11" Foreground="Gray" />
+                                        <TextBlock Text="{Binding FileSize}" FontSize="11" Foreground="Gray" />
+                                    </StackPanel>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+            </Border>
+
+            <Border Grid.Column="1" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Padding="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Border Background="#F6F6F6" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,12">
+                        <Viewbox Stretch="Uniform">
+                            <Image x:Name="PreviewImage" Stretch="Uniform" />
+                        </Viewbox>
+                    </Border>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock x:Name="PreviewFileNameTextBlock" FontWeight="SemiBold" />
+                        <TextBlock x:Name="PreviewDimensionsTextBlock" Foreground="Gray" />
+                        <TextBlock x:Name="PreviewPathTextBlock" Foreground="Gray" TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="4" Margin="0,12,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+                <ProgressBar x:Name="ProcessingProgressBar" Width="320" Height="18" Minimum="0" Margin="0,0,12,0" />
+                <TextBlock x:Name="StatusTextBlock" VerticalAlignment="Center" Foreground="Gray" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <Button x:Name="RotateButton" Content="Rotate Images" Width="140" Margin="0,0,8,0" Click="RotateButton_Click" />
+                <Button x:Name="CancelButton" Content="Cancel" Width="100" IsEnabled="False" Click="CancelButton_Click" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
